@@ -73,7 +73,10 @@ class TPLinkService {
 
     _.forIn(plugs, (deviceInfo, deviceId) => {
       const plug = self.client.getPlug({ host: deviceInfo.connectionInfo.host });
-      self._process(plug);
+
+      plug.getInfo().then((data) => {
+        return self._process(plug, data);
+      });
     });
   }
 
