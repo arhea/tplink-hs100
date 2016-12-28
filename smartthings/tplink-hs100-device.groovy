@@ -6,7 +6,7 @@ metadata {
   }
 
   tiles {
-    standardTile("switchTile", "device.switch", width: 4, height: 4,
+    standardTile("switchTile", "device.switch", width: 2, height: 2,
                  canChangeIcon: true) {
         state "off", label: '${name}', action: "switch.on",
               icon: "st.switches.switch.off", backgroundColor: "#ffffff"
@@ -29,17 +29,26 @@ metadata {
 }
 
 def parse(String description) {
-  log.debug "TPLink: ${description}"
+  log.debug "TPLink: Parsing ${description}"
+
+  def msg = parseLanMessage(description)
+
+  log.debug "TPLink: Body ${msg.data}"
+
+  if(msg.data.sysInfo.relay_state == 1) {
+    sendEvent(name: "switch", value: "on", descriptionText: "Switch is on")
+  } else {
+    sendEvent(name: "switch", value: "off", descriptionText: "Switch is off")
+  }
+
 }
 
 def on() {
   log.debug "TPLink: Turn On ${device.name}"
 
   try {
-    httpGet([ uri: "http://${TPLinkHubHost}:${TPLinkHubPort}", path: "/plugs/${device.deviceNetworkId}/on" ]) { resp ->
-      log.debug "TPLink: Turn On Response ${resp.data}"
-    }
-    sendEvent(name: "switch", value: "on")
+    log.debug "http://${TPLinkHubHost}:${TPLinkHubPort}/plugs/${device.deviceNetworkId}/on"
+    httpGet([ uri: "http://${TPLinkHubHost}:${TPLinkHubPort}", path: "/plugs/${device.deviceNetworkId}/on" ])
   } catch (e) {
     log.error "TPLink Error: $e"
   }
@@ -49,10 +58,8 @@ def off() {
   log.debug "TPLink: Turn Off ${device.name}"
 
   try {
-    httpGet([ uri: "http://${TPLinkHubHost}:${TPLinkHubPort}", path: "/plugs/${device.deviceNetworkId}/off" ]) { resp ->
-      log.debug "TPLink: Turn Off Response ${resp.data}"
-    }
-    sendEvent(name: "switch", value: "off")
+    log.debug "http://${TPLinkHubHost}:${TPLinkHubPort}/plugs/${device.deviceNetworkId}/off"
+    httpGet([ uri: "http://${TPLinkHubHost}:${TPLinkHubPort}", path: "/plugs/${device.deviceNetworkId}/off" ])
   } catch (e) {
     log.error "TPLink Error: $e"
   }
@@ -62,18 +69,8 @@ def poll() {
   log.debug "TPLink: Poll ${device.name}"
 
   try {
-
-    httpGet([ uri: "http://${TPLinkHubHost}:${TPLinkHubPort}", path: "/plugs/${device.deviceNetworkId}" ]) { resp ->
-      log.debug "TPLink: Turn Off Response ${resp.data}"
-
-      if(resp.data.sysInfo.relay_state == 1) {
-        sendEvent(name: "switch", value: "on")
-      } else {
-        sendEvent(name: "switch", value: "off")
-      }
-
-    }
-
+    log.debug "http://${TPLinkHubHost}:${TPLinkHubPort}/plugs/${device.deviceNetworkId}"
+    httpGet([ uri: "http://${TPLinkHubHost}:${TPLinkHubPort}", path: "/plugs/${device.deviceNetworkId}" ])
   } catch (e) {
     log.error "TPLink Error: $e"
   }
