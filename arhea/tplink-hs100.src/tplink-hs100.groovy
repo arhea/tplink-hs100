@@ -1,8 +1,7 @@
 metadata {
 
   definition(name: "TPLink HS-100", namespace: "arhea", author: "Alex Rhea") {
-    capability "Outlet"
-    capability "Polling"
+    capability "Switch"
   }
 
   tiles {
@@ -11,7 +10,7 @@ metadata {
         state "off", label: '${name}', action: "switch.on",
               icon: "st.switches.switch.off", backgroundColor: "#ffffff"
         state "on", label: '${name}', action: "switch.off",
-              icon: "st.switches.switch.on", backgroundColor: "#E60000"
+              icon: "st.switches.switch.on", backgroundColor: "#4CA349"
     }
 
     main "switchTile"
@@ -26,6 +25,21 @@ metadata {
   }
 
 
+}
+
+def installed() {
+  log.debug "TPLink Installed with settings: ${settings}"
+  initialize()
+}
+
+
+def updated() {
+  log.debug "TPLink Updated with settings: ${settings}"
+  initialize()
+}
+
+def initialize() {
+  runEvery5Minutes(updateCurrentStatus)
 }
 
 def parse(String description) {
@@ -46,33 +60,36 @@ def parse(String description) {
 def on() {
   log.debug "TPLink: Turn On ${device.name}"
 
-  try {
-    log.debug "http://${TPLinkHubHost}:${TPLinkHubPort}/plugs/${device.deviceNetworkId}/on"
-    httpGet([ uri: "http://${TPLinkHubHost}:${TPLinkHubPort}", path: "/plugs/${device.deviceNetworkId}/on" ])
-  } catch (e) {
-    log.error "TPLink Error: $e"
-  }
+  def result = new physicalgraph.device.HubAction(
+    method: "GET",
+    path: "/plugs/${device.deviceNetworkId}/on",
+    headers: [
+      HOST: "${TPLinkHubHost}:${TPLinkHubPort}"
+    ]
+  )
 }
 
 def off() {
   log.debug "TPLink: Turn Off ${device.name}"
 
-  try {
-    log.debug "http://${TPLinkHubHost}:${TPLinkHubPort}/plugs/${device.deviceNetworkId}/off"
-    httpGet([ uri: "http://${TPLinkHubHost}:${TPLinkHubPort}", path: "/plugs/${device.deviceNetworkId}/off" ])
-  } catch (e) {
-    log.error "TPLink Error: $e"
-  }
+  def result = new physicalgraph.device.HubAction(
+    method: "GET",
+    path: "/plugs/${device.deviceNetworkId}/off",
+    headers: [
+      HOST: "${TPLinkHubHost}:${TPLinkHubPort}"
+    ]
+  )
 }
 
-def poll() {
+def updateCurrentStatus() {
   log.debug "TPLink: Poll ${device.name}"
 
-  try {
-    log.debug "http://${TPLinkHubHost}:${TPLinkHubPort}/plugs/${device.deviceNetworkId}"
-    httpGet([ uri: "http://${TPLinkHubHost}:${TPLinkHubPort}", path: "/plugs/${device.deviceNetworkId}" ])
-  } catch (e) {
-    log.error "TPLink Error: $e"
-  }
+  def result = new physicalgraph.device.HubAction(
+    method: "GET",
+    path: "/plugs/${device.deviceNetworkId}",
+    headers: [
+      HOST: "${TPLinkHubHost}:${TPLinkHubPort}"
+    ]
+  )
 }
 
