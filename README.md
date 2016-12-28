@@ -19,6 +19,9 @@ cd tplink-hs100
 npm start
 ```
 
+## Samsung SmartThings
+Instructions coming soon...
+
 ## REST API
 The following REST API is exposed by the service.
 
@@ -26,3 +29,6 @@ The following REST API is exposed by the service.
 - `GET` - `/plugs/:deviceId` - Get information about a specific plug on the network.
 - `GET` - `/plugs/:deviceId/on` - Turn the plug on.
 - `GET` - `/plugs/:deviceId/off` - Turn the plug off.
+
+## Thanks
+Thanks to [hs100-api](https://github.com/plasticrake/hs100-api) that serves as the underpinning of this service.
