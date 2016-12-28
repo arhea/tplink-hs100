@@ -1,0 +1,16 @@
+{
+  "name": "tplink-hs100",
+  "version": "1.0.0",
+  "description": "Discovers and manages TPLink Smart Plugs on the LAN.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Alex Rhea <alex.rhea@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "hs100-api": "^0.3.0",
+    "lodash": "^4.17.3"
+  }
+}
