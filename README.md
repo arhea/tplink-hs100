@@ -20,7 +20,6 @@ npm start
 ```
 
 ## Samsung SmartThings
-Instructions coming soon...
 
 ## REST API
 The following REST API is exposed by the service.
