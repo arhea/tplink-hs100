@@ -20,6 +20,11 @@ npm start
 ```
 
 ## Samsung SmartThings
+1. Login to the [SmartThings IDE](https://graph-na02-useast1.api.smartthings.com)
+2. Go to the "My SmartApps" page and click "Settings"
+3. Add this repository to the list of repositories.
+4. Select the TPLink Home Hub and add the script.
+5. Go to the "My Device Handler" page and click "Updaet from Repo" and select the device type. Check the box that says publish.
 
 ## REST API
 The following REST API is exposed by the service.
