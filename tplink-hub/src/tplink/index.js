@@ -2,6 +2,7 @@
 
 const _      = require('lodash');
 const tplink = require('hs100-api');
+const logger = require('../config/logger');
 
 class TPLinkService {
 
@@ -10,22 +11,28 @@ class TPLinkService {
     self.client = new tplink.Client();
     self.plugs = {};
 
+    logger.info('[TPLINK] - starting discovery...');
+
     self.client.startDiscovery().on('plug-new', (plug) => {
-      plug.getInfo().then((data) => {
-        self._process(plug, data);
-      });
+      logger.info('[TPLINK] - found plug', plug);
+      self.updateByPlug(plug);
     });
   }
 
   getAll() {
     const self = this;
 
+    logger.info('[TPLINK] - list all plugs');
+
     self.updateAll().then(() => {
+      logger.debug('[TPLINK] - list all plugs', self.plugs);
       return _.values(self.plugs);
     })
   }
 
   getByDeviceId(deviceId) {
+    logger.info('[TPLINK] - get device by id', deviceId);
+
     const item = _.find(this.plugs, (plug) => {
       return plug.sysInfo.deviceId == deviceId;
     });
@@ -38,6 +45,8 @@ class TPLinkService {
   }
 
   getByMac(mac) {
+    logger.info('[TPLINK] - get device by MAC address', mac);
+
     const item = _.find(this.plugs, (plug) => {
       return plug.sysInfo.mac == mac;
     });
@@ -50,6 +59,8 @@ class TPLinkService {
   }
 
   getByHost(host) {
+    logger.info('[TPLINK] - get device by hostname', host);
+
     const item = _.find(this.plugs, (plug) => {
       return plug.connectionInfo.host == host;
     });
@@ -62,11 +73,15 @@ class TPLinkService {
   }
 
   getInfoByDeviceId(deviceId) {
+    logger.info('[TPLINK] - get device info by device id', deviceId);
+
     const plug = this.getByDeviceId(deviceId);
     return client.updateByPlug(plug);
   }
 
   turnOnByDeviceId(deviceId) {
+    logger.info('[TPLINK] - turn on plug by device id', deviceId);
+
     const plug = this.getByDeviceId(deviceId);
 
     return plug.setPowerState(true).then(() => {
@@ -74,7 +89,29 @@ class TPLinkService {
     });
   }
 
+  turnOnByMac(mac) {
+    logger.info('[TPLINK] - turn on plug by mac', mac);
+
+    const plug = this.getByMac(mac);
+
+    return plug.setPowerState(true).then(() => {
+      return client.updateByPlug(plug);
+    });
+  }
+
+  turnOnByHost(host) {
+    logger.info('[TPLINK] - turn on plug by host', host);
+
+    const plug = this.getByHost(host);
+
+    return plug.setPowerState(true).then(() => {
+      return client.updateByPlug(plug);
+    });
+  }
+
   turnOffByDeviceId(deviceId) {
+    logger.info('[TPLINK] - turn off plug by device id', deviceId);
+
     const plug = this.getByDeviceId(deviceId);
 
     return plug.setPowerState(false).then(() => {
@@ -82,7 +119,29 @@ class TPLinkService {
     });
   }
 
+  turnOffByMac(mac) {
+    logger.info('[TPLINK] - turn off plug by mac', mac);
+
+    const plug = this.getByMac(mac);
+
+    return plug.setPowerState(false).then(() => {
+      return client.updateByPlug(plug);
+    });
+  }
+
+  turnOffByHost(host) {
+    logger.info('[TPLINK] - turn off plug by host', host);
+
+    const plug = this.getByHost(host);
+
+    return plug.setPowerState(false).then(() => {
+      return client.updateByPlug(plug);
+    });
+  }
+
   updateByPlug(plug) {
+    logger.info('[TPLINK] - update plug information by plug', plug);
+
     const self = this;
 
     return plug.getInfo().then((data) => {
@@ -91,11 +150,15 @@ class TPLinkService {
   }
 
   updateByInfo(deviceInfo) {
+    logger.info('[TPLINK] - update plug information by info', deviceInfo);
+
     const plug = this.client.getPlug({ host: deviceInfo.connectionInfo.host });
     return this.updateByPlug(plug);
   }
 
   updateAll() {
+    logger.info('[TPLINK] - update all plugs');
+
     const self = this;
 
     const requests = _.map(self.plugs, function(deviceInfo, deviceId) {
@@ -106,6 +169,8 @@ class TPLinkService {
   }
 
   _process(plug, data) {
+    logger.info('[TPLINK] - process plug info');
+
     const self = this;
 
     data.connectionInfo = {
