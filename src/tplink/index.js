@@ -15,12 +15,14 @@ class TPLinkService {
         self._process(plug, data);
       });
     });
-
-    setInterval(self._refresh.bind(self), 5000);
   }
 
   getAll() {
-    return _.values(self.plugs);
+    const self = this;
+
+    self.updateAll().then(() => {
+      return _.values(self.plugs);
+    })
   }
 
   getByDeviceId(deviceId) {
@@ -59,7 +61,28 @@ class TPLinkService {
     }
   }
 
-  update(plug) {
+  getInfoByDeviceId(deviceId) {
+    const plug = this.getByDeviceId(deviceId);
+    return client.updateByPlug(plug);
+  }
+
+  turnOnByDeviceId(deviceId) {
+    const plug = this.getByDeviceId(deviceId);
+
+    return plug.setPowerState(true).then(() => {
+      return client.updateByPlug(plug);
+    });
+  }
+
+  turnOffByDeviceId(deviceId) {
+    const plug = this.getByDeviceId(deviceId);
+
+    return plug.setPowerState(false).then(() => {
+      return client.updateByPlug(plug);
+    });
+  }
+
+  updateByPlug(plug) {
     const self = this;
 
     return plug.getInfo().then((data) => {
@@ -67,17 +90,19 @@ class TPLinkService {
     });
   }
 
-  _refresh() {
+  updateByInfo(deviceInfo) {
+    const plug = this.client.getPlug({ host: deviceInfo.connectionInfo.host });
+    return this.updateByPlug(plug);
+  }
+
+  updateAll() {
     const self = this;
-    const plugs = self.plugs;
 
-    _.forIn(plugs, (deviceInfo, deviceId) => {
-      const plug = self.client.getPlug({ host: deviceInfo.connectionInfo.host });
-
-      plug.getInfo().then((data) => {
-        return self._process(plug, data);
-      });
+    const requests = _.map(self.plugs, function(deviceInfo, deviceId) {
+      return self.updateByInfo(deviceInfo);
     });
+
+    return Promise.all(requests);
   }
 
   _process(plug, data) {
