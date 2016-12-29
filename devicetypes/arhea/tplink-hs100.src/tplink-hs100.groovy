@@ -4,92 +4,61 @@ metadata {
     capability "Switch"
   }
 
-  tiles {
-    standardTile("switchTile", "device.switch", width: 2, height: 2,
+  tiles() {
+    standardTile("switchTile", "device.switch", width: 3, height: 2,
                  canChangeIcon: true) {
         state "off", label: '${name}', action: "switch.on",
-              icon: "st.switches.switch.off", backgroundColor: "#ffffff"
+              icon: "st.Appliances.appliances17", backgroundColor: "#ffffff"
         state "on", label: '${name}', action: "switch.off",
-              icon: "st.switches.switch.on", backgroundColor: "#4CA349"
+              icon: "st.Appliances.appliances17", backgroundColor: "#86BF34"
     }
 
     main "switchTile"
-    details(["switchTile"])
+    details(["switchTile", "refreshTile"])
   }
-
-  preferences {
-    section("TPLink Hub Information:") {
-      input("TPLinkHubHost", "string", title:"The hostname of the TPLink Hub.", description: "Please enter the hostname of the TPLink Hub.", defaultValue: "", required: true, displayDuringSetup: true)
-      input("TPLinkHubPort", "string", title:"The port number of the TPLink Hub.", description: "Please enter the port number of the TPLink Hub.", defaultValue: "3000", required: true, displayDuringSetup: true)
-    }
-  }
-
 
 }
 
 def installed() {
-  log.debug "TPLink Installed with settings: ${settings}"
+  log.debug "[TPLink][Device][Installed] - ${settings}"
   initialize()
 }
 
-
 def updated() {
-  log.debug "TPLink Updated with settings: ${settings}"
+  log.debug "[TPLink][Device][Updated] - ${settings}"
   initialize()
 }
 
 def initialize() {
-  runEvery5Minutes(updateCurrentStatus)
+  log.debug "[TPLink][Device][Init] - ${settings}"
+  runEvery5Minutes(refresh)
 }
 
-def parse(String description) {
-  log.debug "TPLink: Parsing ${description}"
-
-  def msg = parseLanMessage(description)
-
-  log.debug "TPLink: Body ${msg.data}"
-
-  if(msg.data.sysInfo.relay_state == 1) {
-    sendEvent(name: "switch", value: "on", descriptionText: "Switch is on")
-  } else {
-    sendEvent(name: "switch", value: "off", descriptionText: "Switch is off")
-  }
+def parse(description) {
 
 }
 
 def on() {
-  log.debug "TPLink: Turn On ${device.name}"
+  log.debug "[TPLink][Device][Action] - Turn On ${device.name}"
+  parent.tplinkTurnOnPlug(device)
+}
 
-  def result = new physicalgraph.device.HubAction(
-    method: "GET",
-    path: "/plugs/${device.deviceNetworkId}/on",
-    headers: [
-      HOST: "${TPLinkHubHost}:${TPLinkHubPort}"
-    ]
-  )
+def handleOn() {
+  log.debug "[TPLink][Device][Action] - Handle On ${device.name}"
+  sendEvent(name: "switch", value: "on")
 }
 
 def off() {
-  log.debug "TPLink: Turn Off ${device.name}"
-
-  def result = new physicalgraph.device.HubAction(
-    method: "GET",
-    path: "/plugs/${device.deviceNetworkId}/off",
-    headers: [
-      HOST: "${TPLinkHubHost}:${TPLinkHubPort}"
-    ]
-  )
+  log.debug "[TPLink][Device][Action] - Turn Off ${device.name}"
+  parent.tplinkTurnOffPlug(device)
 }
 
-def updateCurrentStatus() {
-  log.debug "TPLink: Poll ${device.name}"
-
-  def result = new physicalgraph.device.HubAction(
-    method: "GET",
-    path: "/plugs/${device.deviceNetworkId}",
-    headers: [
-      HOST: "${TPLinkHubHost}:${TPLinkHubPort}"
-    ]
-  )
+def handleOff() {
+  log.debug "[TPLink][Device][Action] - Handle Off ${device.name}"
+  sendEvent(name: "switch", value: "off")
 }
 
+def refresh() {
+  log.debug "[TPLink][Device][Action] - Refresh ${device.name}"
+  parent.tplinkTurnOnPlug(device)
+}

@@ -16,11 +16,11 @@ class TPLinkService {
       });
     });
 
-    setInterval(self._refresh.bind(self), 30000);
+    setInterval(self._refresh.bind(self), 5000);
   }
 
   getAll() {
-    return _.values(this.plugs);
+    return _.values(self.plugs);
   }
 
   getByDeviceId(deviceId) {
