@@ -24,7 +24,7 @@ class TPLinkService {
 
     logger.info('[TPLINK] - list all plugs');
 
-    self.updateAll().then(() => {
+    return self.updateAll().then(() => {
       logger.debug('[TPLINK] - list all plugs', self.plugs);
       return _.values(self.plugs);
     })
