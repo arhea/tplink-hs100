@@ -76,7 +76,7 @@ class TPLinkService {
     logger.info('[TPLINK] - get device info by device id', deviceId);
 
     const plug = this.getByDeviceId(deviceId);
-    return this.client.updateByPlug(plug);
+    return this.updateByPlug(plug);
   }
 
   turnOnByDeviceId(deviceId) {
@@ -86,7 +86,7 @@ class TPLinkService {
     const plug = this.getByDeviceId(deviceId);
 
     return plug.setPowerState(true).then(() => {
-      return self.client.updateByPlug(plug);
+      return self.updateByPlug(plug);
     });
   }
 
@@ -97,7 +97,7 @@ class TPLinkService {
     const plug = this.getByMac(mac);
 
     return plug.setPowerState(true).then(() => {
-      return self.client.updateByPlug(plug);
+      return self.updateByPlug(plug);
     });
   }
 
@@ -108,7 +108,7 @@ class TPLinkService {
     const plug = this.getByHost(host);
 
     return plug.setPowerState(true).then(() => {
-      return self.client.updateByPlug(plug);
+      return self.updateByPlug(plug);
     });
   }
 
@@ -119,7 +119,7 @@ class TPLinkService {
     const plug = this.getByDeviceId(deviceId);
 
     return plug.setPowerState(false).then(() => {
-      return self.client.updateByPlug(plug);
+      return self.updateByPlug(plug);
     });
   }
 
@@ -130,7 +130,7 @@ class TPLinkService {
     const plug = this.getByMac(mac);
 
     return plug.setPowerState(false).then(() => {
-      return self.client.updateByPlug(plug);
+      return self.updateByPlug(plug);
     });
   }
 
@@ -141,7 +141,7 @@ class TPLinkService {
     const plug = this.getByHost(host);
 
     return plug.setPowerState(false).then(() => {
-      return self.client.updateByPlug(plug);
+      return self.updateByPlug(plug);
     });
   }
 
