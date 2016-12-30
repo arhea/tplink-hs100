@@ -134,7 +134,7 @@ def tplinkProcessPlug(json) {
       found = addChildDevice("arhea", "TPLink HS-100", json.sysInfo.deviceId, null, [
         "name": "TPLink.${json.sysInfo.deviceId}",
         "label": "${json.sysInfo.alias}",
-        "model": "${json.sysInfo.model}"
+        "model": "${json.sysInfo.model}",
         "data": [
           "host": "${json.connectionInfo.host}",
           "port": "${json.connectionInfo.port}",
