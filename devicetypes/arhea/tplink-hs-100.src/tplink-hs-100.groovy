@@ -17,7 +17,7 @@ metadata {
         icon: "st.Appliances.appliances17", backgroundColor: "#86BF34"
     }
 
-    valueTile("timeTile", "device.data.on_time", width: 1, height: 1, decoration: "flat") {
+    valueTile("timeTile", "on_time", width: 1, height: 1, decoration: "flat") {
       state "on", label:'${currentValue} seconds'
       state "off", label:'N/A'
     }
@@ -49,24 +49,29 @@ def parse(description) {
 
 def on() {
   log.debug "[TPLink][Device][Action] - Turn On ${device.name}"
-  sendEvent(name: "switch", value: "turningOn")
+  sendEvent(name: "switch", value: "turningOn", descriptionText: "${device.name} is turning on.")
   parent.tplinkTurnOnPlug(device)
 }
 
 def handleOn() {
   log.debug "[TPLink][Device][Action] - Handle On ${device.name}"
-  sendEvent(name: "switch", value: "on")
+  sendEvent(name: "switch", value: "on", descriptionText: "${device.name} turned on.")
 }
 
 def off() {
   log.debug "[TPLink][Device][Action] - Turn Off ${device.name}"
-  sendEvent(name: "switch", value: "turningOff")
+  sendEvent(name: "switch", value: "turningOff", descriptionText: "${device.name} is turning off.")
   parent.tplinkTurnOffPlug(device)
 }
 
 def handleOff() {
   log.debug "[TPLink][Device][Action] - Handle Off ${device.name}"
-  sendEvent(name: "switch", value: "off")
+  sendEvent(name: "switch", value: "off", descriptionText: "${device.name} turned off.")
+}
+
+def handleOnTime(value) {
+  log.debug "[TPLink][Device][Action] - Handle On Time ${device.name}"
+  sendEvent(name: "on_time", value: value, descriptionText: "${device.name} has been on for ${value} seconds.")
 }
 
 def refresh() {

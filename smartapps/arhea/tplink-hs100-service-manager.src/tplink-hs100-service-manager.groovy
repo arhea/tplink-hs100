@@ -119,8 +119,6 @@ def tplinkProcessPlug(json) {
       found.data.model = "${json.sysInfo.model}"
       found.data.host = "${json.connectionInfo.host}"
       found.data.port = "${json.connectionInfo.port}"
-      found.data.on_time = "${json.sysInfo.on_time}"
-      found.data.led_off = "${json.sysInfo.led_off}"
       found.data.hwId = "${json.sysInfo.hwId}"
       found.data.fwId = "${json.sysInfo.fwId}"
       found.data.oemId = "${json.sysInfo.oemId}"
@@ -138,8 +136,6 @@ def tplinkProcessPlug(json) {
           "model": "${json.sysInfo.model}",
           "host": "${json.connectionInfo.host}",
           "port": "${json.connectionInfo.port}",
-          "on_time": "${json.sysInfo.on_time}",
-          "led_off": "${json.sysInfo.led_off}",
           "hwId": "${json.sysInfo.hwId}",
           "fwId": "${json.sysInfo.fwId}",
           "oemId": "${json.sysInfo.oemId}",
