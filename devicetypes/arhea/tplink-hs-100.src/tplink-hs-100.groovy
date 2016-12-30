@@ -6,13 +6,13 @@ metadata {
 
   tiles() {
     standardTile("switchTile", "device.switch", width: 3, height: 2, canChangeIcon: true) {
-        state "off", label: '${name}', action: "switch.on",
+        state "off", label: 'Off', action: "switch.on",
               icon: "st.Appliances.appliances17", backgroundColor: "#ffffff"
-        state "on", label: '${name}', action: "switch.off",
+        state "on", label: 'On', action: "switch.off",
               icon: "st.Appliances.appliances17", backgroundColor: "#86BF34"
-        state "turningOn", label: 'Turning On',
+        state "turningOn", label: 'Turning On', action: "switch.on",
               icon: "st.Appliances.appliances17", backgroundColor: "#ffffff"
-        state "turningOff", label: 'Turning Off',
+        state "turningOff", label: 'Turning Off', action: "switch.off",
               icon: "st.Appliances.appliances17", backgroundColor: "#86BF34"
     }
 
