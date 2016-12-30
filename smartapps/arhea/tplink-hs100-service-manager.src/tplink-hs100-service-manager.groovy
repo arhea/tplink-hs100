@@ -34,7 +34,6 @@ def uninstalled() {
 def initialize() {
   log.debug "[TPLink][App][Initialize] - ${settings}"
   tplinkListPlugs()
-  runEvery5Minutes("tplinkListPlugs")
 }
 
 def tplinkListPlugs() {
@@ -115,10 +114,19 @@ def tplinkProcessPlug(json) {
     if(found) {
       log.debug "[TPLink][App] - Updating Existing Plug ${json.sysInfo.alias}"
 
-      found.name = "${json.sysInfo.alias}"
+      found.name = "TPLink.${json.sysInfo.deviceId}"
       found.label = "${json.sysInfo.alias}"
+      found.model = "${json.sysInfo.model}"
       found.data.host = "${json.connectionInfo.host}"
       found.data.port = "${json.connectionInfo.port}"
+      found.data.on_time = "${json.sysInfo.on_time}"
+      found.data.led_off = "${json.sysInfo.led_off}"
+      found.data.hwId = "${json.sysInfo.hwId}"
+      found.data.fwId = "${json.sysInfo.fwId}"
+      found.data.oemId = "${json.sysInfo.oemId}"
+      found.data.mac = "${json.sysInfo.mac}"
+      found.data.latitude = "${json.sysInfo.latitude}"
+      found.data.longitude = "${json.sysInfo.longitude}"
 
     } else {
       log.debug "[TPLink][App] - Adding New Plug ${json.sysInfo.alias}"
@@ -126,9 +134,18 @@ def tplinkProcessPlug(json) {
       found = addChildDevice("arhea", "TPLink HS-100", json.sysInfo.deviceId, null, [
         "name": "TPLink.${json.sysInfo.deviceId}",
         "label": "${json.sysInfo.alias}",
+        "model": "${json.sysInfo.model}"
         "data": [
           "host": "${json.connectionInfo.host}",
-          "port": "${json.connectionInfo.port}"
+          "port": "${json.connectionInfo.port}",
+          "on_time": "${json.sysInfo.on_time}",
+          "led_off": "${json.sysInfo.led_off}",
+          "hwId": "${json.sysInfo.hwId}",
+          "fwId": "${json.sysInfo.fwId}",
+          "oemId": "${json.sysInfo.oemId}",
+          "mac": "${json.sysInfo.mac}",
+          "latitude": "${json.sysInfo.latitude}",
+          "longitude": "${json.sysInfo.longitude}"
         ],
         "completedSetup": true
       ])
