@@ -116,28 +116,28 @@ def tplinkProcessPlug(json) {
       log.debug "[TPLink][App] - Updating Existing Plug ${json.sysInfo.alias}"
 
       found.name = "TPLink.${json.sysInfo.deviceId}"
-      found.label = "${json.sysInfo.alias}"
-      found.data.model = "${json.sysInfo.model}"
-      found.data.host = "${json.connectionInfo.host}"
-      found.data.port = "${json.connectionInfo.port}"
-      found.data.hwId = "${json.sysInfo.hwId}"
-      found.data.fwId = "${json.sysInfo.fwId}"
-      found.data.oemId = "${json.sysInfo.oemId}"
-      found.data.mac = "${json.sysInfo.mac}"
+      found.label = json.sysInfo.alias.toString()
+      found.data.model = json.sysInfo.model.toString()
+      found.data.host = json.connectionInfo.host.toString()
+      found.data.port = json.connectionInfo.port.toString()
+      found.data.hwId = json.sysInfo.hwId.toString()
+      found.data.fwId = json.sysInfo.fwId.toString()
+      found.data.oemId = json.sysInfo.oemId.toString()
+      found.data.mac = json.sysInfo.mac.toString()
 
     } else {
       log.debug "[TPLink][App] - Adding New Plug ${json.sysInfo.alias}"
 
-      found = addChildDevice("arhea", "TPLink HS-100", json.sysInfo.deviceId, null, [
+      found = addChildDevice("arhea", "TPLink HS-100", json.sysInfo.deviceId.toString(), null, [
         "name": "TPLink.${json.sysInfo.deviceId}",
-        "label": "${json.sysInfo.alias}",
+        "label": json.sysInfo.alias.toString(),
         "data": [
-          "host": "${json.connectionInfo.host}",
-          "port": "${json.connectionInfo.port}",
-          "hwId": "${json.sysInfo.hwId}",
-          "fwId": "${json.sysInfo.fwId}",
-          "oemId": "${json.sysInfo.oemId}",
-          "mac": "${json.sysInfo.mac}"
+          "host": json.connectionInfo.host.toString(),
+          "port": json.connectionInfo.port.toString(),
+          "hwId": json.sysInfo.hwId.toString(),
+          "fwId": json.sysInfo.fwId.toString(),
+          "oemId": json.sysInfo.oemId.toString(),
+          "mac": json.sysInfo.mac.toString()
         ],
         "completedSetup": true
       ])
