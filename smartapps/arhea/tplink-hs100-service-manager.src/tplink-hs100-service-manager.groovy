@@ -116,7 +116,7 @@ def tplinkProcessPlug(json) {
 
       found.name = "TPLink.${json.sysInfo.deviceId}"
       found.label = "${json.sysInfo.alias}"
-      found.model = "${json.sysInfo.model}"
+      found.data.model = "${json.sysInfo.model}"
       found.data.host = "${json.connectionInfo.host}"
       found.data.port = "${json.connectionInfo.port}"
       found.data.on_time = "${json.sysInfo.on_time}"
@@ -134,8 +134,8 @@ def tplinkProcessPlug(json) {
       found = addChildDevice("arhea", "TPLink HS-100", json.sysInfo.deviceId, null, [
         "name": "TPLink.${json.sysInfo.deviceId}",
         "label": "${json.sysInfo.alias}",
-        "model": "${json.sysInfo.model}",
         "data": [
+          "model": "${json.sysInfo.model}",
           "host": "${json.connectionInfo.host}",
           "port": "${json.connectionInfo.port}",
           "on_time": "${json.sysInfo.on_time}",
