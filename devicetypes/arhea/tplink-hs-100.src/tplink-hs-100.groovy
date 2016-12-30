@@ -5,16 +5,19 @@ metadata {
   }
 
   tiles() {
-    standardTile("switchTile", "device.switch", width: 3, height: 2,
-                 canChangeIcon: true) {
+    standardTile("switchTile", "device.switch", width: 3, height: 2, canChangeIcon: true) {
         state "off", label: '${name}', action: "switch.on",
               icon: "st.Appliances.appliances17", backgroundColor: "#ffffff"
         state "on", label: '${name}', action: "switch.off",
               icon: "st.Appliances.appliances17", backgroundColor: "#86BF34"
+        state "turningOn", label: 'Turning On',
+              icon: "st.Appliances.appliances17", backgroundColor: "#ffffff"
+        state "turningOff", label: 'Turning Off',
+              icon: "st.Appliances.appliances17", backgroundColor: "#86BF34"
     }
 
     main "switchTile"
-    details(["switchTile", "refreshTile"])
+    details(["switchTile"])
   }
 
 }
@@ -40,6 +43,7 @@ def parse(description) {
 
 def on() {
   log.debug "[TPLink][Device][Action] - Turn On ${device.name}"
+  sendEvent(name: "switch", value: "turningOn")
   parent.tplinkTurnOnPlug(device)
 }
 
@@ -50,6 +54,7 @@ def handleOn() {
 
 def off() {
   log.debug "[TPLink][Device][Action] - Turn Off ${device.name}"
+  sendEvent(name: "switch", value: "turningOff")
   parent.tplinkTurnOffPlug(device)
 }
 
@@ -60,5 +65,5 @@ def handleOff() {
 
 def refresh() {
   log.debug "[TPLink][Device][Action] - Refresh ${device.name}"
-  parent.tplinkTurnOnPlug(device)
+  parent.tplinkGetPlug(device)
 }
