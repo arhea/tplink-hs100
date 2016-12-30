@@ -34,6 +34,7 @@ def uninstalled() {
 def initialize() {
   log.debug "[TPLink][App][Initialize] - ${settings}"
   tplinkListPlugs()
+  runEvery5Minutes(tplinkListPlugs())
 }
 
 def tplinkListPlugs() {
@@ -123,8 +124,6 @@ def tplinkProcessPlug(json) {
       found.data.fwId = "${json.sysInfo.fwId}"
       found.data.oemId = "${json.sysInfo.oemId}"
       found.data.mac = "${json.sysInfo.mac}"
-      found.data.latitude = "${json.sysInfo.latitude}"
-      found.data.longitude = "${json.sysInfo.longitude}"
 
     } else {
       log.debug "[TPLink][App] - Adding New Plug ${json.sysInfo.alias}"
@@ -133,15 +132,12 @@ def tplinkProcessPlug(json) {
         "name": "TPLink.${json.sysInfo.deviceId}",
         "label": "${json.sysInfo.alias}",
         "data": [
-          "model": "${json.sysInfo.model}",
           "host": "${json.connectionInfo.host}",
           "port": "${json.connectionInfo.port}",
           "hwId": "${json.sysInfo.hwId}",
           "fwId": "${json.sysInfo.fwId}",
           "oemId": "${json.sysInfo.oemId}",
-          "mac": "${json.sysInfo.mac}",
-          "latitude": "${json.sysInfo.latitude}",
-          "longitude": "${json.sysInfo.longitude}"
+          "mac": "${json.sysInfo.mac}"
         ],
         "completedSetup": true
       ])
