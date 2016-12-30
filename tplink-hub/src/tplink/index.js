@@ -76,66 +76,72 @@ class TPLinkService {
     logger.info('[TPLINK] - get device info by device id', deviceId);
 
     const plug = this.getByDeviceId(deviceId);
-    return client.updateByPlug(plug);
+    return this.client.updateByPlug(plug);
   }
 
   turnOnByDeviceId(deviceId) {
     logger.info('[TPLINK] - turn on plug by device id', deviceId);
 
+    const self = this;
     const plug = this.getByDeviceId(deviceId);
 
     return plug.setPowerState(true).then(() => {
-      return client.updateByPlug(plug);
+      return self.client.updateByPlug(plug);
     });
   }
 
   turnOnByMac(mac) {
     logger.info('[TPLINK] - turn on plug by mac', mac);
 
+    const self = this;
     const plug = this.getByMac(mac);
 
     return plug.setPowerState(true).then(() => {
-      return client.updateByPlug(plug);
+      return self.client.updateByPlug(plug);
     });
   }
 
   turnOnByHost(host) {
     logger.info('[TPLINK] - turn on plug by host', host);
 
+    const self = this;
     const plug = this.getByHost(host);
 
     return plug.setPowerState(true).then(() => {
-      return client.updateByPlug(plug);
+      return self.client.updateByPlug(plug);
     });
   }
 
   turnOffByDeviceId(deviceId) {
     logger.info('[TPLINK] - turn off plug by device id', deviceId);
 
+    const self = this;
     const plug = this.getByDeviceId(deviceId);
 
     return plug.setPowerState(false).then(() => {
-      return client.updateByPlug(plug);
+      return self.client.updateByPlug(plug);
     });
   }
 
   turnOffByMac(mac) {
     logger.info('[TPLINK] - turn off plug by mac', mac);
 
+    const self = this;
     const plug = this.getByMac(mac);
 
     return plug.setPowerState(false).then(() => {
-      return client.updateByPlug(plug);
+      return self.client.updateByPlug(plug);
     });
   }
 
   turnOffByHost(host) {
     logger.info('[TPLINK] - turn off plug by host', host);
 
+    const self = this;
     const plug = this.getByHost(host);
 
     return plug.setPowerState(false).then(() => {
-      return client.updateByPlug(plug);
+      return self.client.updateByPlug(plug);
     });
   }
 
