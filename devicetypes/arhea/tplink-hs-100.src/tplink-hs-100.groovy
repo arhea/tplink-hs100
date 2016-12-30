@@ -4,20 +4,29 @@ metadata {
     capability "Switch"
   }
 
-  tiles() {
-    standardTile("switchTile", "device.switch", width: 3, height: 2, canChangeIcon: true) {
-        state "off", label: 'Off', action: "switch.on",
-              icon: "st.Appliances.appliances17", backgroundColor: "#ffffff"
-        state "on", label: 'On', action: "switch.off",
-              icon: "st.Appliances.appliances17", backgroundColor: "#86BF34"
-        state "turningOn", label: 'Turning On', action: "switch.on",
-              icon: "st.Appliances.appliances17", backgroundColor: "#ffffff"
-        state "turningOff", label: 'Turning Off', action: "switch.off",
-              icon: "st.Appliances.appliances17", backgroundColor: "#86BF34"
+  tiles(scale: 2) {
+
+    multiAttributeTile(name:"switch", type: "lighting", width: 6, height: 4, canChangeIcon: true){
+
+      tileAttribute ("device.switch", key: "PRIMARY_CONTROL") {
+        state "on", label: 'On', action: "switch.off", icon: "st.switches.switch.on", backgroundColor: "#79b821", nextState: "turningOff"
+        state "off", label: 'Off', action: "switch.on", icon: "st.switches.switch.off", backgroundColor: "#ffffff", nextState: "turningOn"
+        state "turningOn", label: 'Turning On', action: "switch.off", icon: "st.switches.switch.on", backgroundColor: "#79b821", nextState: "on"
+        state "turningOff", label: 'Turning Off', action: "switch.on", icon: "st.switches.switch.off", backgroundColor: "#ffffff", nextState: "off"
+      }
+
+      tileAttribute ("device.data.on_time", key: "SECONDARY_CONTROL") {
+        state "default", label:'${currentValue} s'
+      }
     }
 
-    main "switchTile"
-    details(["switchTile"])
+    standardTile("refresh", "device.data.on_time", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
+      state "default", label:"", action:"refresh.refresh", icon:"st.secondary.refresh"
+    }
+
+    main "switch"
+    details(["switch","refresh"])
+
   }
 
 }
