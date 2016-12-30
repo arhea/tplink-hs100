@@ -3,6 +3,7 @@ definition(
   namespace: "arhea",
   author: "Alex Rhea",
   description: "This discovers TPLink HS100 Smart Plugs via the TPLink HS100 Hub.",
+  category: "Lights & Switches",
   iconUrl: "https://lh3.googleusercontent.com/e3xV1TP8CpuDqcCvKsVTWaW1SJG-8uOCOs5x-fmdhz53lj3iQfFO_PjC8rQpOJnX0Lc=w300",
   iconX2Url: "https://lh3.googleusercontent.com/e3xV1TP8CpuDqcCvKsVTWaW1SJG-8uOCOs5x-fmdhz53lj3iQfFO_PjC8rQpOJnX0Lc=w300",
   iconX3Url: "https://lh3.googleusercontent.com/e3xV1TP8CpuDqcCvKsVTWaW1SJG-8uOCOs5x-fmdhz53lj3iQfFO_PjC8rQpOJnX0Lc=w300",
