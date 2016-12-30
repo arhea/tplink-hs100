@@ -148,11 +148,13 @@ def tplinkProcessPlug(json) {
 
     }
 
-    if(json.sysInfo.relay_state == 1) {
+    if(json.sysInfo.relay_state == 1 && found.state != "on") {
       found.handleOn()
-    } else {
+    } else if(json.sysInfo.relay_state == 0 && found.state != "off") {
       found.handleOff()
     }
+
+    found.handleOnTime(json.sysInfo.on_time)
 
   } catch(e) {
     log.error "[TPLink][App] - Error processing device: ${e}"
