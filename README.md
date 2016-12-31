@@ -2,21 +2,20 @@
 This NodeJS server is a simple REST API to discover and interact with TPLink HS100 Smart Plugs.
 
 ## Installing
-To get started, install NodeJS on a Raspberry Pi.
+To get started, install Docker on a Raspberry Pi.
 
 ```bash
-wget https://nodejs.org/dist/v6.9.2/node-v6.9.2-linux-armv7l.tar.xz
-tar -xvf node-v6.9.2-linux-armv7l.tar.xz
-cd node-v6.9.2-linux-armv7l
-sudo cp -R * /usr/local/
+wget -qO- https://get.docker.com/ | sh
 ```
 
-Clone this repository to a folder and run the server.
+Pull and run the server
 
 ```bash
-git clone git@github.com:arhea/tplink-hs100.git
-cd tplink-hs100
-npm start
+docker run -d --name tplink-hs100-hub \
+  -p 3000:3000 \
+  --restart always \
+  --network host \
+  arhea/tplink-hs100-hub:armhf
 ```
 
 ## Samsung SmartThings

@@ -14,6 +14,11 @@ app.use(bodyParser.json());
 app.use(morgan('combined'));
 logger.info('[API] - completed registering middleware');
 
+app.get('/health', function (req, res) {
+  logger.info('[API][Health] - healthcheck');
+  res.send('ok');
+});
+
 app.get('/plugs', function (req, res) {
   logger.info('[API][Plugs][List]  - list all plugs on network');
 
