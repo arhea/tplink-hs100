@@ -1,16 +1,20 @@
-# TPLink Home Hub
-This NodeJS server is a simple REST API to discover and interact with TPLink HS100 Smart Plugs.
+# TPLink HS100 Home Hub (Unofficial)
+This NodeJS server is a simple REST API to discover and interact with [TPLink HS100 Smart Plugs](http://www.tp-link.com/us/products/details/cat-5516_HS100.html) that runs on a [Raspberry Pi](https://www.amazon.com/CanaKit-Raspberry-Complete-Starter-Kit/dp/B01C6Q2GSY/) on your home network. This hub interacts over REST API and also comes with a [Samsung SmartThings](https://www.smartthings.com/) Integration.
 
-## Installing
-To get started, install Docker on a Raspberry Pi.
+## Getting Started
+To get started, plugin your Raspberry Pi to the network that your plugs are connected to. Setup your Switches using the TPLink Kasa app. Next, install Docker on the Raspberry Pi.
 
 ```bash
+apt-get update -y && apt-get upgrade -y && apt-get install wget -y
 wget -qO- https://get.docker.com/ | sh
+sudo usermod pi -aG docker
 ```
 
-Pull and run the server
+Once Docker is installed, it is time to run the hub. The following Docker commands are all you need to get started.
 
 ```bash
+docker pull arhea/tplink-hs100-hub:armhf
+
 docker run -d --name tplink-hs100-hub \
   -p 3000:3000 \
   --restart always \
@@ -18,7 +22,9 @@ docker run -d --name tplink-hs100-hub \
   arhea/tplink-hs100-hub:armhf
 ```
 
-## Samsung SmartThings
+Now, visit the `http://<ip address of pi>:3000/plugs` and you should see all of your plugs listed. New plugs will automatically be discovered once they are configured using the Kasa app.
+
+## Samsung SmartThings Integration
 1. Login to the [SmartThings IDE](https://graph-na02-useast1.api.smartthings.com)
 2. Go to the "My SmartApps" page and click "Settings"
 3. Add this repository to the list of repositories.
