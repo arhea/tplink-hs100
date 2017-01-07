@@ -7,6 +7,10 @@
     "start": "node index.js"
   },
   "author": "Alex Rhea <alex.rhea@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:arhea/tplink-hs100.git"
+  },
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
