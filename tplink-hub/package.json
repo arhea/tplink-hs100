@@ -11,6 +11,10 @@
     "type": "git",
     "url": "git@github.com:arhea/tplink-hs100.git"
   },
+  "bugs": {
+    "url": "https://github.com/arhea/tplink-hs100/issues"
+  },
+  "homepage": "https://github.com/arhea/tplink-hs100",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
