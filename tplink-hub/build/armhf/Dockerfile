@@ -1,7 +1,8 @@
 FROM scratch
 ADD rootfs.tar.gz /
-RUN apk update && apk upgrade && apk add curl nodejs \
-    && mkdir -p /usr/src/app
+RUN apk --update --no-cache add curl nodejs npm \
+    && mkdir -p /usr/src/app \
+    && npm install -g npm
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 RUN npm install
