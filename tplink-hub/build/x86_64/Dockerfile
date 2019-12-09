@@ -1,4 +1,4 @@
-FROM node:6-alpine
+FROM node:10-alpine
 ADD rootfs.tar.gz /
 RUN apk update && apk upgrade && apk add curl \
     && mkdir -p /usr/src/app
